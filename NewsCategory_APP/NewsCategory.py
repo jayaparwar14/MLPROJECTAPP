@@ -18,7 +18,7 @@ try:
 except LookupError:
     nltk.download('omw-1.4')
 
-    
+
 nltk.download('stopwords')
 
 # svc = joblib.load("News_Category_svc_model.pkl")
@@ -26,8 +26,20 @@ nltk.download('stopwords')
 
 BASE_DIR = os.path.dirname(__file__)
 
-svc = joblib.load(os.path.join(BASE_DIR, "News_Category_svc_model.pkl"))
-tfidf = joblib.load(os.path.join(BASE_DIR, "News_Category_tfidf.pkl"))
+@st.cache_resource
+def load_model():
+    return joblib.load(os.path.join(BASE_DIR, "News_model.pkl"))
+
+svc = load_model()
+
+@st.cache_resource
+def load_vectorizer():
+    return joblib.load(os.path.join(BASE_DIR, "tfidf.pkl"))
+
+tfidf = load_vectorizer()
+
+# svc = joblib.load(os.path.join(BASE_DIR, "News_Category_svc_model.pkl"))
+# tfidf = joblib.load(os.path.join(BASE_DIR, "News_Category_tfidf.pkl"))
 
 lemmitizer = WordNetLemmatizer()
 stop_words = set(stopwords.words("english"))
