@@ -5,6 +5,20 @@ import joblib
 import streamlit as st
 import os
 import nltk
+
+import nltk
+
+try:
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('wordnet')
+
+try:
+    nltk.data.find('corpora/omw-1.4')
+except LookupError:
+    nltk.download('omw-1.4')
+
+    
 nltk.download('stopwords')
 
 # svc = joblib.load("News_Category_svc_model.pkl")
