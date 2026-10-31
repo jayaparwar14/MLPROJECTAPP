@@ -28,13 +28,13 @@ BASE_DIR = os.path.dirname(__file__)
 
 @st.cache_resource
 def load_model():
-    return joblib.load(os.path.join(BASE_DIR, "News_model.pkl"))
+    return joblib.load(os.path.join(BASE_DIR, "News_Category_svc_model.pkl"))
 
 svc = load_model()
 
 @st.cache_resource
 def load_vectorizer():
-    return joblib.load(os.path.join(BASE_DIR, "tfidf.pkl"))
+    return joblib.load(os.path.join(BASE_DIR, "News_Category_tfidf.pkl"))
 
 tfidf = load_vectorizer()
 
