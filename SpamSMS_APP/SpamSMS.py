@@ -10,10 +10,24 @@ nltk.download('stopwords')
 # lr = joblib.load("SMS_Spam_lr_model.pkl")
 # tfidf = joblib.load("SMS_Spam_tfidf.pkl")
 
+
 BASE_DIR = os.path.dirname(__file__)
 
-lr = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
-tfidf = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
+@st.cache_resource
+def load_model():
+    return joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
+
+lr = load_model()
+
+@st.cache_resource
+def load_vectorizer():
+    return joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
+
+tfidf = load_vectorizer()
+
+
+# lr = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
+# tfidf = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
 
 def clean_text (text) :
 
