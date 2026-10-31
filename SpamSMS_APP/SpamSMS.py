@@ -4,6 +4,8 @@ from nltk.stem import PorterStemmer
 import joblib
 import streamlit as st
 import os
+import nltk
+nltk.download('stopwords')
 
 # lr = joblib.load("SMS_Spam_lr_model.pkl")
 # tfidf = joblib.load("SMS_Spam_tfidf.pkl")
