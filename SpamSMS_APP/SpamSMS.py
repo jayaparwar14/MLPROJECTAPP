@@ -1,5 +1,4 @@
 import re
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 import joblib
@@ -32,7 +31,8 @@ def clean_text (text) :
 
     # Tockenize the text
 
-    words = word_tokenize(text)
+    # words = word_tokenize(text)
+    words = text.split()
     # return words
 
     # remove stop words 
