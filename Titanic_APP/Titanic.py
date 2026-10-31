@@ -1,10 +1,16 @@
 import joblib
 import pandas as pd
 import streamlit as st
+import os
+
+# lr = joblib.load("Titanic_lr_model.pkl")
+# scaler = joblib.load("Titanic_scaler.pkl")
 
 
-lr = joblib.load("Titanic_lr_model.pkl")
-scaler = joblib.load("Titanic_scaler.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+lr = joblib.load(os.path.join(BASE_DIR, "Titanic_lr_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "Titanic_scaler.pkl"))
 
 def predict_survival () :
 
