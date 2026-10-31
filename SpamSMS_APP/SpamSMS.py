@@ -4,10 +4,15 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 import joblib
 import streamlit as st
+import os
 
+# lr = joblib.load("SMS_Spam_lr_model.pkl")
+# tfidf = joblib.load("SMS_Spam_tfidf.pkl")
 
-lr = joblib.load("SMS_Spam_lr_model.pkl")
-tfidf = joblib.load("SMS_Spam_tfidf.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+lr = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
+tfidf = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
 
 def clean_text (text) :
 
