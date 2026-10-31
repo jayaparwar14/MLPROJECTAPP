@@ -1,13 +1,19 @@
 import re 
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 import joblib
 import streamlit as st
+import os
+import nltk
+nltk.download('stopwords')
 
+# svc = joblib.load("News_Category_svc_model.pkl")
+# tfidf = joblib.load("News_Category_tfidf.pkl")
 
-svc = joblib.load("News_Category_svc_model.pkl")
-tfidf = joblib.load("News_Category_tfidf.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+svc = joblib.load(os.path.join(BASE_DIR, "News_Category_svc_model.pkl"))
+tfidf = joblib.load(os.path.join(BASE_DIR, "News_Category_tfidf.pkl"))
 
 lemmitizer = WordNetLemmatizer()
 stop_words = set(stopwords.words("english"))
@@ -20,7 +26,7 @@ def clean_text (text) :
 
     text = re.sub(r"[^a-zA-Z\s]" , "" , text)
 
-    words = word_tokenize(text)
+    words = text.split()
 
     filtered_words = [word for word in words if word not in stop_words]
 
