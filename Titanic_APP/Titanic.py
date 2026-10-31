@@ -9,8 +9,19 @@ import os
 
 BASE_DIR = os.path.dirname(__file__)
 
-lr = joblib.load(os.path.join(BASE_DIR, "Titanic_lr_model.pkl"))
-scaler = joblib.load(os.path.join(BASE_DIR, "Titanic_scaler.pkl"))
+# lr = joblib.load(os.path.join(BASE_DIR, "Titanic_lr_model.pkl"))
+# scaler = joblib.load(os.path.join(BASE_DIR, "Titanic_scaler.pkl"))
+
+@st.cache_resource
+def load_model():
+    return joblib.load(os.path.join(BASE_DIR, "Titanic_lr_model.pkl"))
+
+@st.cache_resource
+def load_scaler():
+    return joblib.load(os.path.join(BASE_DIR, "Titanic_scaler.pkl"))
+
+lr = load_model()
+scaler = load_scaler()
 
 def predict_survival () :
 
@@ -30,7 +41,7 @@ def predict_survival () :
     age = st.number_input("Age " , min_value = 0 , max_value = 100 , value = 25 )
     sibsp = st.number_input("Sibilings " , min_value = 0 , max_value = 8 , step = 1 ) 
     parch = st.number_input("Parch " , min_value = 0 , max_value = 6 , step = 1 ) 
-    fare = st.number_input("Fare " , value = 0.0) 
+    fare = st.number_input("Fare " , min_value = 0.0 , value = 10.0) 
     embarked_c = st.selectbox("Emabarked_c " , [0,1])
     embarked_q = st.selectbox("Embarked_q " , [0,1])
     embarked_s = st.selectbox("Embarked_s " , [0,1])
@@ -55,10 +66,12 @@ def predict_survival () :
             embarked_s
         ]] , columns = x)
 
+        with st.spinner("Predicting survival..."):
 
-        data = scaler.transform(data)
 
-        prediction = lr.predict(data)
+            data = scaler.transform(data)
+
+            prediction = lr.predict(data)
 
         if prediction[0] == 1 :
 

@@ -6,7 +6,6 @@ import streamlit as st
 import os
 import nltk
 
-import nltk
 
 try:
     nltk.data.find('corpora/wordnet')
@@ -19,7 +18,10 @@ except LookupError:
     nltk.download('omw-1.4')
 
 
-nltk.download('stopwords')
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
 
 # svc = joblib.load("News_Category_svc_model.pkl")
 # tfidf = joblib.load("News_Category_tfidf.pkl")
@@ -79,11 +81,6 @@ def news_prdict () :
 
     text = st.text_area("Enter News Description " , height = 100)
 
-    cleaned_text = clean_text(text)
-
-    tfidf_newtext = tfidf.transform([cleaned_text])
-
-    prediction = svc.predict(tfidf_newtext)
 
     if st.button("Predict") :
 
@@ -93,23 +90,32 @@ def news_prdict () :
 
         else :
 
-            if prediction == 0:
+            with st.spinner("Analyzing News..."):
+
+                cleaned_text = clean_text(text)
+            
+                tfidf_newtext = tfidf.transform([cleaned_text])
+            
+                prediction = svc.predict(tfidf_newtext)
+            
+
+            if prediction[0] == 0:
 
                 st.success("News Category : Politics")
                 st.write("🏛️ This article discusses government, public policies, elections, or political events.")
 
-            elif prediction == 1:
+            elif prediction[0] == 1:
 
                 st.success("News Category : Technology")
                 st.write("💻 This article is related to technology, innovation, software, AI, or digital trends.")
 
 
-            elif prediction == 2:
+            elif prediction[0] == 2:
 
                 st.success("News Category : Entertainment")
                 st.write("🎬 This article is related to movies, television, celebrities, music, or the entertainment industry.")
 
-            elif prediction == 3:
+            elif prediction[0] == 3:
 
                 st.success("News Category : Business")
                 st.write("💼 This article focuses on companies, markets, finance, investments, or economic activities.")

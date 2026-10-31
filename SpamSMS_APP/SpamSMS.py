@@ -4,8 +4,12 @@ from nltk.stem import PorterStemmer
 import joblib
 import streamlit as st
 import os
-import nltk
-nltk.download('stopwords')
+import nltk 
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
 
 # lr = joblib.load("SMS_Spam_lr_model.pkl")
 # tfidf = joblib.load("SMS_Spam_tfidf.pkl")
@@ -28,6 +32,10 @@ tfidf = load_vectorizer()
 
 # lr = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
 # tfidf = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
+
+stop_words = set(stopwords.words("english"))
+
+stemmer = PorterStemmer()
 
 def clean_text (text) :
 
@@ -53,13 +61,8 @@ def clean_text (text) :
 
     # remove stop words 
 
-    stop_words = set(stopwords.words("english"))
     filtered_words = [word for word in words if word not in stop_words]
     # return filtered_words
-
-    # Initialize PorterStemmer
-
-    stemmer = PorterStemmer()
 
     # Perfom Stemming -> convert into base form 
 
@@ -102,11 +105,13 @@ def predict_spam () :
 
         else :
 
-            cleaned_msg = clean_text(msg)
+            with st.spinner("Analyzing message..."):
 
-            tfidf_msg = tfidf.transform([cleaned_msg])
+                cleaned_msg = clean_text(msg)
 
-            prediction = lr.predict(tfidf_msg)
+                tfidf_msg = tfidf.transform([cleaned_msg])
+
+                prediction = lr.predict(tfidf_msg)
 
             if prediction[0] == 0 :
 
