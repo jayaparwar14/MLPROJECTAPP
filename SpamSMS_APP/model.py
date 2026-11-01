@@ -16,22 +16,28 @@ import joblib
 
 
 # df = pd.read_csv("C:\\Users\\jayap\\OneDrive\\Desktop\\SMS Spam Collection Dataset.csv")
-df = pd.read_csv(
+old_df = pd.read_csv(
     "C:\\Users\\jayap\\OneDrive\\Desktop\\SMS Spam Collection Dataset.csv",
     encoding = "latin1"
 )
+new_df = pd.read_csv("C:\\Users\\jayap\\OneDrive\\Desktop\\ML Python Practice\\custom_sms.csv")
+# print(new_df)
+
+
 # print(df)
 # print(df.columns)
 
 ## Drop useless columns
-df.drop(["Unnamed: 2" , "Unnamed: 3" , "Unnamed: 4"] , axis = 1 , inplace = True)
+old_df.drop(["Unnamed: 2" , "Unnamed: 3" , "Unnamed: 4"] , axis = 1 , inplace = True)
 
-# print(df)
-# print(df.columns)
+# print(old_df)
+# print(old_df.columns)
+
+# new_df["label"] = new_df["label"].str.lower()
 
 ## Change column name 
 
-df = df.rename(
+old_df = old_df.rename(
 
     columns = {
         
@@ -40,7 +46,26 @@ df = df.rename(
     }
 )
 
+
+new_df = new_df.rename(
+
+    columns = {
+        
+        "label" : "label",
+        "message" : "MSG"
+        
+    }
+)
+# print(new_df.columns)
+
+
+df = pd.concat([old_df,new_df], ignore_index=True)
+
 # print(df.columns)
+
+print(df.shape)
+print(df["label"].value_counts())
+
 
 ## Check NaN value
 
@@ -57,7 +82,7 @@ df = df.drop_duplicates()
 # print(df.duplicated().sum())
 # print(df.shape)
 
-## Create a function for clean the text 
+# ## Create a function for clean the text 
 
 stop_words = set(stopwords.words("english"))
 # Initialize PorterStemmer
@@ -121,12 +146,18 @@ v = df["label"].value_counts().plot(kind = "bar")
 le = LabelEncoder()
 
 df["label"] = le.fit_transform(df["label"])
+# print(le.classes_)
+# print(dict(zip(
+#     le.classes_,
+#     le.transform(le.classes_)
+# )))
 
 ## Apply tfidf vectorizer 
 
-tfidf = TfidfVectorizer()
+tfidf = TfidfVectorizer(ngram_range=(1,2),max_features=5000)
 
 SMS_tfidf = tfidf.fit_transform(df["SMS"])
+
 
 ## Now we apply train test split 
 
@@ -142,6 +173,7 @@ lr = LogisticRegression()
 lr.fit(X_train_resampled , y_train_resampled)
 y_pred = lr.predict(X_test)
 
+
 joblib.dump(lr, "SMS_Spam_lr_model.pkl")
 joblib.dump(tfidf, "SMS_Spam_tfidf.pkl")
 
@@ -155,9 +187,6 @@ classify = classification_report(y_test , y_pred)
 mnb = MultinomialNB()
 mnb.fit(X_train_resampled , y_train_resampled)
 y_pred = mnb.predict(X_test)
-
-# joblib.dump(mnb, "SMS_Spam_mnb_model.pkl")
-
 accuracy = accuracy_score(y_test , y_pred)
 confused = confusion_matrix(y_test , y_pred)
 classify = classification_report(y_test , y_pred)
@@ -168,9 +197,6 @@ classify = classification_report(y_test , y_pred)
 bnb = BernoulliNB()
 bnb.fit(X_train_resampled , y_train_resampled)
 y_pred = bnb.predict(X_test)
-
-# joblib.dump(bnb, "SMS_Spam_bnb_model.pkl")
-
 accuracy = accuracy_score(y_test , y_pred)
 confused = confusion_matrix(y_test , y_pred)
 classify = classification_report(y_test , y_pred)
@@ -181,9 +207,6 @@ classify = classification_report(y_test , y_pred)
 svc = SVC()
 svc.fit(X_train_resampled , y_train_resampled)
 y_pred = svc.predict(X_test)
-
-# joblib.dump(svc, "SMS_Spam_svc_model.pkl")
-
 accuracy = accuracy_score(y_test , y_pred)
 confused = confusion_matrix(y_test , y_pred)
 classify = classification_report(y_test , y_pred)
