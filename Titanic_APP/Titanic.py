@@ -36,22 +36,24 @@ def predict_survival () :
         """
     )    
 
-    pclass = st.selectbox("Passengr Class " , [1,2,3])
-    gender = st.selectbox("Gender " , ["Male" , "Female"])
-    age = st.number_input("Age " , min_value = 0 , max_value = 100 , value = 25 )
-    sibsp = st.number_input("Sibilings " , min_value = 0 , max_value = 8 , step = 1 ) 
-    parch = st.number_input("Parch " , min_value = 0 , max_value = 6 , step = 1 ) 
-    fare = st.number_input("Fare " , min_value = 0.0 , value = 10.0) 
-    embarked_c = st.selectbox("Emabarked_c " , [0,1])
-    embarked_q = st.selectbox("Embarked_q " , [0,1])
-    embarked_s = st.selectbox("Embarked_s " , [0,1])
-
+    pclass = st.selectbox("Passengr_Travel_Class " , [1,2,3])
+    gender = st.selectbox("Passenger_Gender " , ["Male" , "Female"])
+    age = st.number_input("Passenger_Age " , min_value = 0 , max_value = 100 , value = 25 )
+    sibsp = st.number_input("Number of sibilings travelling " , min_value = 0 , max_value = 8 , step = 1 ) 
+    parch = st.number_input("Number of Parents and Children " , min_value = 0 , max_value = 6 , step = 1 ) 
+    fare = st.number_input("Ticket Price Paid by Passenger " , min_value = 0.0 , value = 10.0) 
+    boarding_port = st.selectbox("Where did the passenger board the ship?",["Cherbourg", "Queenstown", "Southampton"]
+)
     if st.button("Predict") :
 
         x = ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked_C",
            "Embarked_Q", "Embarked_S"]
 
         gender = 0 if gender == "Female" else 1
+        embarked_c = 1 if boarding_port == "Cherbourg" else 0
+        embarked_q = 1 if boarding_port == "Queenstown" else 0 
+        embarked_s = 1 if boarding_port == "Southampton" else 0 
+
 
         data = pd.DataFrame(
             [[
