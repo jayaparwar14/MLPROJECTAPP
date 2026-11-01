@@ -11,8 +11,6 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
-# lr = joblib.load("SMS_Spam_lr_model.pkl")
-# tfidf = joblib.load("SMS_Spam_tfidf.pkl")
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -29,9 +27,6 @@ def load_vectorizer():
 
 tfidf = load_vectorizer()
 
-
-# lr = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_lr_model.pkl"))
-# tfidf = joblib.load(os.path.join(BASE_DIR, "SMS_Spam_tfidf.pkl"))
 
 stop_words = set(stopwords.words("english"))
 
@@ -75,8 +70,6 @@ def clean_text (text) :
     return cleaned_text
 
 
-## Now creating a deployment function 
-
 
 def predict_spam () :
 
@@ -93,9 +86,10 @@ def predict_spam () :
     )
 
     st.header("✍️ Message Analysis")
-
+    
     msg = st.text_area("Enter Message to Detect" , height = 50) 
 
+    
     if st.button("Detect") :
 
 
@@ -131,6 +125,7 @@ def predict_spam () :
                     promotional content, scams, or unwanted messages.
                     """)
 
+    
     with st.expander("📖 About this Project"):
         st.markdown("""
         ### 📩 SMS Spam Detection System
