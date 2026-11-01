@@ -63,8 +63,8 @@ df = pd.concat([old_df,new_df], ignore_index=True)
 
 # print(df.columns)
 
-print(df.shape)
-print(df["label"].value_counts())
+# print(df.shape)
+# print(df["label"].value_counts())
 
 
 ## Check NaN value
