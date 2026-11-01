@@ -174,7 +174,7 @@ lr.fit(X_train_resampled , y_train_resampled)
 y_pred = lr.predict(X_test)
 
 
-joblib.dump(lr, "SMS_Spam_lr_model.pkl")
+joblib.dump(lr, "SMS_Spam_model.pkl")
 joblib.dump(tfidf, "SMS_Spam_tfidf.pkl")
 
 accuracy = accuracy_score(y_test , y_pred)
