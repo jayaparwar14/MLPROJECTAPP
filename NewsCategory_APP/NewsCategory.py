@@ -30,9 +30,9 @@ BASE_DIR = os.path.dirname(__file__)
 
 @st.cache_resource
 def load_model():
-    return joblib.load(os.path.join(BASE_DIR, "News_Category_svc_model.pkl"))
+    return joblib.load(os.path.join(BASE_DIR, "News_Category_lr_model.pkl"))
 
-svc = load_model()
+lr = load_model()
 
 @st.cache_resource
 def load_vectorizer():
@@ -96,7 +96,7 @@ def news_prdict () :
             
                 tfidf_newtext = tfidf.transform([cleaned_text])
             
-                prediction = svc.predict(tfidf_newtext)
+                prediction = lr.predict(tfidf_newtext)
             
 
             if prediction[0] == 0:
@@ -119,6 +119,16 @@ def news_prdict () :
 
                 st.success("News Category : Business")
                 st.write("💼 This article focuses on companies, markets, finance, investments, or economic activities.")
+
+            elif prediction[0] == 4:
+                
+                st.success("News Category : Sports")
+                st.write("🏆 This article focuses on sports events, tournaments, athletes, teams, matches, or championship results.")
+
+            elif prediction[0] == 5:
+
+                st.success("News Category : World News")
+                st.write("🌍 This article focuses on international affairs, global events, world issues, foreign relations, or news from different countries.")
 
             else:
                 st.success("Unknown Category")

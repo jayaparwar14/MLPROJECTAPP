@@ -127,32 +127,3 @@ confused = confusion_matrix(y_test, y_pred)
 # print(accurate)
 # print(confused)
 
-## Train a model random forest classifier
-
-rfc = RandomForestClassifier()
-
-rfc.fit(X_train_scalled , y_train)
-y_pred = rfc.predict(X_test_scalled)
-
-# joblib.dump(rfc, "Titanic_rfc_model.pkl")
-
-accurate = accuracy_score(y_test , y_pred)
-confused = confusion_matrix(y_test, y_pred)
-# print(accurate)
-# print(confused)
-
-## Train a model svc
-
-svc = SVC()
-
-svc.fit(X_train_scalled , y_train)
-y_pred = svc.predict(X_test_scalled)
-
-# joblib.dump(svc, "Titanic_svc_model.pkl")
-
-accurate = accuracy_score(y_test , y_pred)
-confused = confusion_matrix(y_test, y_pred)
-# print(accurate)
-# print(confused)
-
-
