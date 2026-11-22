@@ -139,7 +139,7 @@ def predict_disease () :
 
         prediction = rfc.predict(data)
 
-        if prediction[0] == 0 :
+        if prediction[0] == 1 :
 
             st.success("Not disease")
 
