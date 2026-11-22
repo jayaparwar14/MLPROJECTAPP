@@ -1,9 +1,19 @@
 import joblib
 import pandas as pd
 import streamlit as st
+import os
 
-rfc = joblib.load("HeartDisease_rfc_model.pkl")
-scaler = joblib.load("HeartDisease_scaler.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+@st.cache_resource 
+def load_model():
+    return joblib.load(os.path.join(BASE_DIR , "HeartDisease_rfc_model.pkl"))
+
+def load_scaler():
+    return joblib.load(os.path.join(BASE_DIR , "HeartDisease_scaler.pkl"))
+
+rfc = load_model()
+scaler = load_scaler()
 
 
 def predict_disease () :
