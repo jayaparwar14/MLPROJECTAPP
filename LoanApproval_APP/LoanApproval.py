@@ -140,31 +140,31 @@ def LoanApprovalPredict () :
                 """)       
 
 
-        with st.expander("About this Project"):
-            st.write("""
-            🏦 Loan Approval Prediction System
+    with st.expander("About this Project"):
+        st.write("""
+        🏦 Loan Approval Prediction System
 
-            This project uses a Machine Learning model trained on historical
-            loan application data to predict whether a loan is likely to be approved.
+        This project uses a Machine Learning model trained on historical
+        loan application data to predict whether a loan is likely to be approved.
 
-            Features Used:
-            - Age
-            - Gender
-            - Education
-            - Annual Income
-            - Employment Experience
-            - Home Ownership
-            - Loan Amount
-            - Loan Purpose
-            - Interest Rate
-            - Loan Percent Income
-            - Credit History Length
-            - Credit Score
-            - Previous Loan Default
+        Features Used:
+        - Age
+        - Gender
+        - Education
+        - Annual Income
+        - Employment Experience
+        - Home Ownership
+        - Loan Amount
+        - Loan Purpose
+        - Interest Rate
+        - Loan Percent Income
+        - Credit History Length
+        - Credit Score
+        - Previous Loan Default
 
-            The model analyzes an applicant's financial profile and predicts
-            the probability of loan approval.
-            """)     
+        The model analyzes an applicant's financial profile and predicts
+        the probability of loan approval.
+        """)     
 
         
 
