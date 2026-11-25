@@ -1,0 +1,173 @@
+import joblib
+import pandas as pd
+import streamlit as st
+import os 
+BASE_DIR = os.path.dirname(__file__)
+
+# lr = joblib.load(os.path.join(BASE_DIR, "Titanic_lr_model.pkl"))
+# scaler = joblib.load(os.path.join(BASE_DIR, "Titanic_scaler.pkl"))
+
+@st.cache_resource
+def load_model():
+    return joblib.load(os.path.join(BASE_DIR, "HeartDisease_rfc_model.pkl"))
+
+@st.cache_resource
+def load_scaler():
+    return joblib.load(os.path.join(BASE_DIR, "HeartDisease_scaler.pkl"))
+
+rfc = load_model()
+scaler = load_scaler()
+
+
+def predict_disease () :
+
+    st.title("❤️ Heart Disease Prediction System")
+
+    st.subheader(
+        "Predict the likelihood of heart disease using health and medical information."
+    )
+
+    st.write(
+        """
+        This machine learning application analyzes important health factors such as age,
+        blood pressure, cholesterol level, heart rate, ECG results, and other medical
+        indicators to estimate the risk of heart disease.
+
+        Please enter accurate information, preferably from your medical report, to obtain
+        the most reliable prediction.
+        """
+    )
+
+    age = st.number_input("Your Age " , min_value = 29 , max_value = 77 , value = 30)
+    sex = st.selectbox("Your Gender " , ["Male" , "Female"])
+    cp= st.selectbox ("Do you experience chest pain?" , ["No chest pain" , "Chest pain during physical activity" , "Occasional chest discomfort" , "Frequent chest pain"])
+    trestbps = st.number_input("Blood Pressure" , min_value = 94 , max_value = 200 , value = 120)
+    chol = st.number_input( "What is your cholesterol level? (mg/dL)" ,
+    help = "You can find this value in your blood test report." , min_value = 126 , max_value = 564 , value = 200)
+    fbs = st.selectbox("Do You Have High Blood Sugar?", ["No" , "Yes"])
+    restecg = st.selectbox("ECG Test Result" , ["Normal" , "Slightly Abnormal" , "Highly Abnormal"])
+    thalach = st.number_input("Highest Heart Rate" , min_value = 71 , max_value = 202 , value = 150)
+    exang = st.selectbox("Chest Pain During Exercise", ["No", "Yes"])
+    oldpeak = st.number_input("Heart Stress Level" , min_value = 0.0 , max_value = 6.2 , value = 1.0)
+    slope = st.selectbox("Heart Activity Pattern" , ["Normal" , "Moderately Different" , "Very Different"])
+    ca = st.selectbox("Blocked Blood Vessels Count", [0,1,2,3,4])
+    thal = st.selectbox("What is the Thalassemia test result mentioned in your medical report?" , ["Type 0", "Type 1", "Type 2", "Type 3"],
+    help="Please select the value exactly as mentioned in your medical report. If you are unsure, consult your doctor or lab report.")
+
+    if st.button ("Predict") : 
+
+        sex = 1 if sex == "Male" else 0 
+        if cp == "No chest pain" : 
+
+            cp = 0 
+
+        elif cp == "Chest pain during physical activity" :
+
+            cp = 1 
+
+        elif cp == "Occasional chest discomfort" :
+
+            cp = 2 
+
+        else :
+
+            cp = 3
+
+        fbs = 0 if fbs == "No" else 1
+
+        if restecg == "Normal" :
+
+            restecg = 0 
+
+        elif restecg == "Slightly Abnormal" :
+
+            restecg = 1 
+
+        else :
+
+            restecg = 2
+
+        exang = 0 if exang == "No" else 1 
+
+        if slope == "Normal" :
+
+            slope = 0 
+
+        elif slope == "Moderately Different" :
+
+            slope = 1 
+
+        else : 
+
+            slope = 2
+
+        if thal == "Type 0" :
+
+            thal = 0
+
+        elif thal == "Type 1" :
+
+            thal = 1
+
+        elif thal == "Type 2" :
+
+            thal = 2
+
+        else:
+
+            thal = 3
+
+        x = ["age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach",
+           "exang", "oldpeak", "slope", "ca", "thal"]
+
+        data = pd.DataFrame (
+            [[
+                age,
+                sex,
+                cp,
+                trestbps,
+                chol, 
+                fbs,
+                restecg, 
+                thalach,
+                exang,
+                oldpeak, 
+                slope,
+                ca, 
+                thal,
+            ]] , columns = x
+        )
+
+        data = scaler.transform(data)
+
+        prediction = rfc.predict(data)
+
+        if prediction[0] == 0 :
+
+            st.success("Not disease")
+
+            st.write(
+                """
+                The model predicts a lower likelihood of heart disease based on the provided
+                information. Maintaining a healthy lifestyle, regular exercise, a balanced diet,
+                and routine medical checkups can help support long-term heart health.
+                """
+            )
+
+        else :
+
+            st.error("Disease")
+
+            st.write(
+                """
+                The model predicts that the entered health information is associated with
+                an increased risk of heart disease. Please consult a qualified healthcare
+                professional for proper medical evaluation and guidance.
+                """
+            )
+
+    st.info(
+        "Note: This prediction is generated by a machine learning model and should not be considered a medical diagnosis. Always consult a healthcare professional for medical advice."
+    )
+
+predict_disease()
